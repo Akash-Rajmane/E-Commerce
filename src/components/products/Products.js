@@ -45,17 +45,18 @@ const Products = () => {
         
         ]
   return (
-    <ul className="d-flex flex-column flex-wrap flex-md-nowrap list-unstyled gap-3">
+    <ul className="row list-unstyled m-4 p-4">
         {productsArr.map(el=>{
             return(
-                <li className='d-flex flex-column justify-content-center align-items-center gap-2 flex-wrap'>
-                    <span>{el.title}</span>
-                    <img src={el.imageUrl} alt="product"/>
-                    <div className='d-flex gap-3 justify-content-center align-items-center'>
-                        <span>${el.price}</span>
-                        <button className='btn btn-primary'>Add to cart</button>
+                <li className="col-md-6 col-sm-12 mb-4">
+                    <div className='d-flex flex-column justify-content-center align-items-center gap-2'>
+                        <span>{el.title}</span>
+                        <img src={el.imageUrl} alt="product"/>
+                        <div className='d-flex gap-3 justify-content-center align-items-center'>
+                            <span>${el.price}</span>
+                            <button className='btn btn-primary'>Add to cart</button>
+                        </div>
                     </div>
-                    
                 </li>
             )
         })}
