@@ -10,8 +10,11 @@ function App() {
   return (
     <div className="App">
       <Header setIsCartShown={setIsCartShown}/>
+      <main style={{marginTop:"80px"}}>
       <Products/>
       {isCartShown && <Cart setIsCartShown={setIsCartShown}/>}
+      </main>
+      
     </div>
   );
 }
