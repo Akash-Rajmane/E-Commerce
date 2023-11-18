@@ -1,25 +1,35 @@
 import React, { useContext, useEffect, useState } from 'react';
 import CartContext from '../../context/cart-context';
+import { ThreeDots } from 'react-loader-spinner';
 
 const Products = () => {
     const {addItem} = useContext(CartContext);
-    const [data, setData] = useState()
+    const [movies, setMovies] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     
     useEffect(()=>{
-        getData();
-        //console.log(data);
+        fetchMovies();   
     },[])
 
-    async function getData(){
+    async function fetchMovies(){
         try{
-            const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+            setIsLoading(true);
+            const response = await fetch("https://swapi.dev/api/films/");
             const result = await response.json();
-            setData(result);
-            
+            const transformedMovies = result.results.map(el=>{
+                return {
+                    id: el.episode_id,
+                    title: el.title,
+                    openingText : el.opening_crawl,
+                    releaseDate: el.release_date
+                }
+            })
+            setMovies(transformedMovies);
+            setIsLoading(false);
         }catch(err){
             console.log(err);
         }
-        
+       
     }
 
     const productsArr = [
@@ -84,8 +94,26 @@ const Products = () => {
         }
 
   return (
-    <ul className="row list-unstyled m-4 p-4">
-        {productsArr.map(el=>{
+    <ul className="list-unstyled m-4 p-4 d-flex justify-content-center align-items-center flex-column">
+    {isLoading ?
+        <ThreeDots  
+            height="80" 
+            width="80" 
+            radius="9"
+            color="#1e90ff" 
+            ariaLabel="three-dots-loading"
+            visible={true}
+        />
+    :  movies.map(el=>{
+        return(
+            <li key={el.id}>
+                {el.title}
+            </li>
+        )
+    })
+    }
+
+        {/* {productsArr.map(el=>{
             return(
                 <li className="col-md-6 col-sm-12 mb-4" key={el.id}>
                     <div className='d-flex flex-column justify-content-center align-items-center gap-2'>
@@ -98,7 +126,7 @@ const Products = () => {
                     </div>
                 </li>
             )
-        })}
+        })} */}
     </ul>
   )
 }
