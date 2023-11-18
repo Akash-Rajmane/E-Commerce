@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CartContext from '../../context/cart-context';
 import { ThreeDots } from 'react-loader-spinner';
 
@@ -6,16 +6,21 @@ const Products = () => {
     const {addItem} = useContext(CartContext);
     const [movies, setMovies] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    
-    useEffect(()=>{
-        fetchMovies();   
-    },[])
+    const [error, setError] = useState(false);
 
-    async function fetchMovies(){
+    const fetchMovies = useCallback(async ()=>{
+        setIsLoading(true);
+        setError(null);
         try{
-            setIsLoading(true);
             const response = await fetch("https://swapi.dev/api/films/");
+
+            if(!response.ok){
+                throw new Error("Something went wrong");
+            }
+        
             const result = await response.json();
+
+           
             const transformedMovies = result.results.map(el=>{
                 return {
                     id: el.episode_id,
@@ -25,12 +30,18 @@ const Products = () => {
                 }
             })
             setMovies(transformedMovies);
-            setIsLoading(false);
+           
         }catch(err){
-            console.log(err);
+            setError(err.message);
         }
-       
-    }
+        setIsLoading(false);
+    },[])
+    
+    useEffect(()=>{
+        fetchMovies();   
+    },[])
+
+    
 
     const productsArr = [
 
@@ -95,7 +106,7 @@ const Products = () => {
 
   return (
     <ul className="list-unstyled m-4 p-4 d-flex justify-content-center align-items-center flex-column">
-    {isLoading ?
+    {isLoading && 
         <ThreeDots  
             height="80" 
             width="80" 
@@ -103,14 +114,16 @@ const Products = () => {
             color="#1e90ff" 
             ariaLabel="three-dots-loading"
             visible={true}
-        />
-    :  movies.map(el=>{
-        return(
-            <li key={el.id}>
-                {el.title}
-            </li>
-        )
-    })
+        />}
+     {error && !isLoading && <p>{error}</p>}
+     {!isLoading &&
+        movies.map(el=>{
+            return(
+                <li key={el.id}>
+                    {el.title}
+                </li>
+            )
+        })
     }
 
         {/* {productsArr.map(el=>{
