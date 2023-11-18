@@ -1,8 +1,27 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CartContext from '../../context/cart-context';
 
 const Products = () => {
     const {addItem} = useContext(CartContext);
+    const [data, setData] = useState()
+    
+    useEffect(()=>{
+        getData();
+        //console.log(data);
+    },[])
+
+    async function getData(){
+        try{
+            const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+            const result = await response.json();
+            setData(result);
+            
+        }catch(err){
+            console.log(err);
+        }
+        
+    }
+
     const productsArr = [
 
         {
