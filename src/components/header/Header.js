@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import CartContext from '../../context/cart-context';
 
 const Header = ({setIsCartShown}) => {
+  const {items} = useContext(CartContext);
+
+  const totalCartItems = items.reduce((total,curr)=>{
+    return total + Number(curr.quantity);
+  },0);
+
   return (
     <header className="position-fixed w-100 top-0 start-0 bg-dark text-white d-flex justify-content-around align-items-center gap-4" style={{height:"60px", zIndex:"10"}}>
         <nav className='d-flex justify-content-center align-items-center'>
@@ -10,7 +17,7 @@ const Header = ({setIsCartShown}) => {
                 <li className='mx-4'>About</li>
             </ul>
         </nav>
-        <button className='btn btn-primary' onClick={()=>setIsCartShown(flag=>!flag)}>Cart</button>
+        <button className='btn btn-primary d-flex gap-2' onClick={()=>setIsCartShown(flag=>!flag)}><span>Cart</span><span>{totalCartItems}</span></button>
     </header>
   )
 }
