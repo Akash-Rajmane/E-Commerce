@@ -47,7 +47,12 @@ function App() {
         stars: 5,
         text: "Best In Quality",
         buyer: "Arif Mondal"
-      }
+      },
+      {
+        stars: 5,
+        text: "Good Product, Worth the price",
+        buyer: "Sujay Raj"
+      },
     ]
 
     
@@ -78,14 +83,14 @@ function App() {
 
     reviews: [
       {
-        stars: 4,
-        text: "Love It",
-        buyer: "Ashish Patel"
+        stars: 5,
+        text: "Worth It",
+        buyer: "Rahul Patel"
       },
       {
-        stars: 5,
+        stars: 4,
         text: "Best In Quality",
-        buyer: "Arif Mondal"
+        buyer: "Ajay Singh"
       }
     ]
 
@@ -152,7 +157,12 @@ function App() {
       ["Model", "Evo"]
     ],
 
-    reviews: [
+    reviews: [  
+    {
+      stars: 5,
+      text: "Awsome Product",
+      buyer: "Kapil Sharma"
+    },
       {
         stars: 4,
         text: "Love It",

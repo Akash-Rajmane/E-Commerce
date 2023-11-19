@@ -47,7 +47,7 @@ const Product = ({products}) => {
                 {product.reviews.map(el=>{
                     return(
                         <div className='bg-light d-flex flex-column' style={{paddingLeft:"20px"}}>
-                            <h5>{el.text} <span>{el.stars}⭐</span></h5>
+                            <h5>{el.text} <span style={{width:"60px", background:"green", color:"#fff", borderRadius:"8px", padding:"4px", fontSize:"12px"}}>{el.stars}⭐</span></h5>
                             <p className='text-secondary'>{el.buyer}</p>
                         </div>
                     )
