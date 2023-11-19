@@ -6,7 +6,8 @@ const CartContext = React.createContext({
     addItem: (item) => {},
     removeItem: (id) => {},
     removeAllItems: () => {},
-    removeEntireItem: (id) => {}
+    removeEntireItem: (id) => {},
+    changeQuantity: (id,quantity) => {}
 });
 
 export default CartContext;
@@ -74,7 +75,7 @@ const cartReducer = (state, action) => {
         case "REMOVE_ENTIRE_ITEM": {
             
             const updatedItems = state.items.filter(item => item.id !== action.id);
-            const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity),0);
+            const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity)*Number(curr.price),0);
 
             return {
                 items: updatedItems,
@@ -84,6 +85,26 @@ const cartReducer = (state, action) => {
 
         case "REMOVE_ALL": {
             return defaultState;
+        }
+
+        case "CHANGE_QUANTITY": {
+            const updatedItems = state.items.map(item=>{
+                if(item.id===action.id){
+                    return {
+                        ...item,
+                        quantity: action.quantity
+                    }
+                }else{
+                    return item;
+                }
+            })
+
+            const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity)*Number(curr.price),0);
+            
+            return{
+                items: updatedItems,
+                totalAmount: updatedTotalAmount
+            }
         }
 
         default: 
@@ -109,6 +130,10 @@ export const CartContextProvider = (props) => {
         dispatch({type:"REMOVE_ENTIRE_ITEM",id:id})
     }
 
+    const changeQuantityHandler = (id,quantity) => {
+        dispatch({type:"CHANGE_QUANTITY", id:id, quantity:quantity})
+    }
+
 
     let cartContext = {
         items: cartState.items,
@@ -116,7 +141,8 @@ export const CartContextProvider = (props) => {
         addItem: addItemToCartHandler,
         removeItem: removeItemFromCartHandler,
         removeAllItems : removeAllItemsFromCartHandler, 
-        removeEntireItem: removeEntireItemFromCartHandler
+        removeEntireItem: removeEntireItemFromCartHandler,
+        changeQuantity: changeQuantityHandler
     }
 
 return(

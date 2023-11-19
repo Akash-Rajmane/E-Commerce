@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Input =({defaultvalue,className,style,type}) => {
+const Input =({value,className,style,type,onChange}) => {
 
   return (
-    <input defaultValue={defaultvalue} className={className} style={style} type={type} min={1}/>
+    <input value={value} className={className} style={style} type={type} min={1} onChange={onChange}/>
   )
 }
 

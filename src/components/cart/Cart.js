@@ -1,11 +1,10 @@
-import React, { useContext} from 'react';
+import React, { useContext, useState, useEffect} from 'react';
 import CartContext from '../../context/cart-context';
 import Input from '../input/Input';
 
 const Cart = ({setIsCartShown}) => {
-  const {items,removeEntireItem,removeAllItems,totalAmount} = useContext(CartContext);
+  const {items,removeEntireItem,removeAllItems,totalAmount,changeQuantity} = useContext(CartContext);
   
- 
   const removeFromCart = (id) => {
     removeEntireItem(id);
   }
@@ -33,21 +32,7 @@ const Cart = ({setIsCartShown}) => {
         <div className='col-4'>Price</div>
         <div className='col-4'>Quantity</div>
       </div>
-      {items.map((el) => (
-        <div key={el.id} className='row w-100 mb-3'>
-          <div className='col-4 d-flex align-items-center'>
-            <img src={el.imageUrl} className="rounded-4" style={{ width: "40px", height: "40px" }} alt="product" />
-            <span className='ms-2'>{el.title}</span>
-          </div>
-          <div className='col-4 d-flex align-items-center'>
-            ${el.price}
-          </div>
-          <div className='col-4 d-flex align-items-center'>
-            <Input defaultvalue={el.quantity} className='form-control me-2' style={{ width: "55px", height: "35px" }} type={"number"}/>
-            <button className='btn btn-danger' onClick={()=>removeFromCart(el.id)}>Remove</button>
-          </div>
-        </div>
-      ))}
+      {items.map(el=><Item el={el} removeFromCart={removeFromCart} changeQuantity={changeQuantity}/>)}
       <h4>Total: ${totalAmount}</h4>
       <button className='btn btn-primary' onClick={purchaseItemsFromCart}>Purchase</button>
     </div>
@@ -55,3 +40,37 @@ const Cart = ({setIsCartShown}) => {
 }
 
 export default Cart;
+
+const Item = ({el,removeFromCart, changeQuantity}) => {
+  const [quantity,setQuantity] = useState(el.quantity);
+
+  const quantityChangeHandler = (e) => {
+    setQuantity(e.target.value);
+  }
+
+  useEffect(()=>{
+    changeQuantity(el.id,quantity)
+  },[quantity,el.id,changeQuantity])
+
+  return(
+    <div key={el.id} className='row w-100 mb-3'>
+    <div className='col-4 d-flex align-items-center'>
+      <img src={el.imageUrl} className="rounded-4" style={{ width: "40px", height: "40px" }} alt="product" />
+      <span className='ms-2'>{el.title}</span>
+    </div>
+    <div className='col-4 d-flex align-items-center'>
+      ${el.price}
+    </div>
+    <div className='col-4 d-flex align-items-center'>
+      <Input 
+        value={quantity}
+        className='form-control me-2'
+        style={{ width: "55px", height: "35px" }}
+        type={"number"}
+        onChange={quantityChangeHandler}
+        />
+      <button className='btn btn-danger' onClick={()=>removeFromCart(el.id)}>Remove</button>
+    </div>
+  </div>
+  )
+} 
