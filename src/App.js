@@ -208,6 +208,7 @@ function App() {
           <Route path="/about" element={<About/>} />
           {!isLoggedIn && <Route path="/login" element={<Login/>}/>}
           {isLoggedIn && <Route path='/contact' element={<Contact addMessage={addMessageHandler}/>} />}
+          <Route path="*" element={<Login/>}/>
         </Routes>
       </main>
     </CartContextProvider>
