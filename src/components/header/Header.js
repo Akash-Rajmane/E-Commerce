@@ -1,9 +1,11 @@
 import React, { useContext } from 'react';
 import CartContext from '../../context/cart-context';
 import { NavLink } from 'react-router-dom';
+import AuthContext from '../../context/auth-context';
 
 const Header = ({setIsCartShown}) => {
   const {items} = useContext(CartContext);
+  const {isLoggedIn, logout} = useContext(AuthContext);
   
 
   const totalCartItems = items.reduce((total,curr)=>{
@@ -16,12 +18,14 @@ const Header = ({setIsCartShown}) => {
         <nav className='d-flex justify-content-center align-items-center'>
             <ul className="d-flex align-items-center list-unstyled gap-4 mt-3 fs-5">
                 <li className='mx-4'><NavLink to="/" className="text-decoration-none" style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Home</NavLink></li>
-                <li className='mx-4'><NavLink to="/store" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Store</NavLink></li>
+                {isLoggedIn &&<li className='mx-4'><NavLink to="/store" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Store</NavLink></li>}
                 <li className='mx-4'><NavLink to="/about" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>About Us</NavLink></li>
-                <li className='mx-4'><NavLink to="/contact" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Contact Us</NavLink></li>
+                {isLoggedIn &&<li className='mx-4'><NavLink to="/contact" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Contact Us</NavLink></li>}
+                {!isLoggedIn && <li className='mx-4'><NavLink to="/login" className="text-decoration-none"  style={({isActive}) => isActive ? {color:"dodgerblue"} : {color:"#fff"}}>Login</NavLink></li>}
             </ul>
         </nav>
-        <button className='btn btn-primary d-flex gap-2' onClick={()=>setIsCartShown(flag=>!flag)}><span>Cart</span><span>{totalCartItems}</span></button>
+        {isLoggedIn && <button className='btn btn-primary d-flex gap-2' onClick={()=>setIsCartShown(flag=>!flag)}><span>Cart</span><span>{totalCartItems}</span></button>}
+        {isLoggedIn && <button className='btn btn-danger' onClick={logout}>logout</button>}
     </header>
   )
 }

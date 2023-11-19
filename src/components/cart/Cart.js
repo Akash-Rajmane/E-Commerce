@@ -3,11 +3,11 @@ import CartContext from '../../context/cart-context';
 import Input from '../input/Input';
 
 const Cart = ({setIsCartShown}) => {
-  const {items,removeItem,removeAllItems,totalAmount} = useContext(CartContext);
+  const {items,removeEntireItem,removeAllItems,totalAmount} = useContext(CartContext);
   const quantityRef = useRef();
  
   const removeFromCart = (id) => {
-    removeItem(id);
+    removeEntireItem(id);
   }
 
   const purchaseItemsFromCart = () => {
@@ -39,7 +39,7 @@ const Cart = ({setIsCartShown}) => {
             ${el.price}
           </div>
           <div className='col-4 d-flex align-items-center'>
-            <Input defaultValue={el.quantity} ref={quantityRef} className='form-control me-2' style={{ width: "55px", height: "35px" }} type={"number"}/>
+            <Input value={el.quantity} className='form-control me-2' style={{ width: "55px", height: "35px" }} type={"number"}/>
             <button className='btn btn-danger' onClick={()=>removeFromCart(el.id)}>Remove</button>
           </div>
         </div>

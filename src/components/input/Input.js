@@ -1,10 +1,10 @@
 import React from 'react'
 
-const Input = React.forwardRef(({defaultValue,className,style,type},ref) => {
+const Input =({value,className,style,type}) => {
 
   return (
-    <input defaultValue={defaultValue} className={className} style={style} ref={ref} type={type} min={1}/>
+    <input value={value} className={className} style={style} type={type} min={1}/>
   )
-})
+}
 
 export default Input;

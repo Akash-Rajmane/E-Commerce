@@ -1,18 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import './App.css';
 import Header from './components/header/Header';
 import Products from './pages/products/Products';
 import Cart from './components/cart/Cart';
 import { CartContextProvider } from './context/cart-context';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
 import About from './pages/about/About';
 import Contact from './pages/contact/Contact';
 import Product from './pages/products/Product';
+import AuthContext from './context/auth-context';
 
+import Login from './pages/login/Login';
 
 function App() {
   const [isCartShown, setIsCartShown] = useState(false);
+  const {isLoggedIn} = useContext(AuthContext);
+
   const productsArr = [
 
     {
@@ -190,23 +194,24 @@ function App() {
     const data = await response.json();
     console.log(data);
   }
+
   return (
-    <Router>
+
     <CartContextProvider>
       <Header setIsCartShown={setIsCartShown}/>
-      {isCartShown && <Cart setIsCartShown={setIsCartShown}/>} 
+      {isCartShown && isLoggedIn && <Cart setIsCartShown={setIsCartShown}/>} 
       <main style={{marginTop:"80px"}}>
         <Routes>
           <Route path="/" element={<Home/>} />
-          <Route path="/store" element={<Products products={productsArr}/>} />
-          <Route path="/store/:productId" element={<Product products={productsArr}/>}/>
+          {isLoggedIn && <Route path="/store" element={<Products products={productsArr}/>} />}
+          {isLoggedIn && <Route path="/store/:productId" element={<Product products={productsArr}/>}/>}
           <Route path="/about" element={<About/>} />
-          <Route path='/contact' element={<Contact addMessage={addMessageHandler}/>} />
+          {!isLoggedIn && <Route path="/login" element={<Login/>}/>}
+          {isLoggedIn && <Route path='/contact' element={<Contact addMessage={addMessageHandler}/>} />}
         </Routes>
       </main>
-      
     </CartContextProvider>
-    </Router>
+  
   );
 }
 

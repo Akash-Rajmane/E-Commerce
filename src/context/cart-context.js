@@ -5,7 +5,8 @@ const CartContext = React.createContext({
     totalAmount: 0,
     addItem: (item) => {},
     removeItem: (id) => {},
-    removeAllItems: () => {}
+    removeAllItems: () => {},
+    removeEntireItem: (id) => {}
 });
 
 export default CartContext;
@@ -70,6 +71,17 @@ const cartReducer = (state, action) => {
             }
         }
 
+        case "REMOVE_ENTIRE_ITEM": {
+            
+            const updatedItems = state.items.filter(item => item.id !== action.id);
+            const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity),0);
+
+            return {
+                items: updatedItems,
+                totalAmount: updatedTotalAmount
+            }
+        }
+
         case "REMOVE_ALL": {
             return defaultState;
         }
@@ -92,13 +104,19 @@ export const CartContextProvider = (props) => {
     const removeAllItemsFromCartHandler = () => {
         dispatch({type:"REMOVE_ALL"})
     }
+    
+    const removeEntireItemFromCartHandler = (id) => {
+        dispatch({type:"REMOVE_ENTIRE_ITEM",id:id})
+    }
+
 
     let cartContext = {
         items: cartState.items,
         totalAmount: cartState.totalAmount,
         addItem: addItemToCartHandler,
         removeItem: removeItemFromCartHandler,
-        removeAllItems : removeAllItemsFromCartHandler 
+        removeAllItems : removeAllItemsFromCartHandler, 
+        removeEntireItem: removeEntireItemFromCartHandler
     }
 
 return(
