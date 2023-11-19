@@ -196,7 +196,6 @@ function App() {
   }
 
   return (
-
     <CartContextProvider>
       <Header setIsCartShown={setIsCartShown}/>
       {isCartShown && isLoggedIn && <Cart setIsCartShown={setIsCartShown}/>} 
@@ -212,7 +211,6 @@ function App() {
         </Routes>
       </main>
     </CartContextProvider>
-  
   );
 }
 

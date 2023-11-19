@@ -29,13 +29,13 @@ export const AuthContextProvider = (props) => {
         navigate("/login");
     },[navigate]);
 
-      // Auto-logout after 5 minutes 
+      // Auto-logout after 15 minutes 
     useEffect(() => {
         let logoutTimer;
         if (userIsLoggedIn) {
         logoutTimer = setTimeout(() => {
             logoutHandler();
-        }, 5 * 60 * 1000); // 5 minutes in milliseconds
+        }, 15 * 60 * 1000); // 5 minutes in milliseconds
         }
 
         // Clear the timer when the component unmounts or when the user logs in again

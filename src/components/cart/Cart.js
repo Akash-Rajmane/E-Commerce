@@ -1,23 +1,27 @@
-import React, { useContext, useRef } from 'react';
+import React, { useContext} from 'react';
 import CartContext from '../../context/cart-context';
 import Input from '../input/Input';
 
 const Cart = ({setIsCartShown}) => {
   const {items,removeEntireItem,removeAllItems,totalAmount} = useContext(CartContext);
-  const quantityRef = useRef();
+  
  
   const removeFromCart = (id) => {
     removeEntireItem(id);
   }
 
   const purchaseItemsFromCart = () => {
-    if(items.length===0){
-      alert("Cart is Empty");
-      return;
-    }
-    console.log(quantityRef.current.value);
     alert("Your purchase is successful.");
     removeAllItems();
+  }
+
+  if(items.length===0){
+    return(
+      <div className='position-fixed p-4 shadow rounded bg-white d-flex flex-column align-items-center gap-3' style={{top:"60px",right:"0", width:"500px"}}>
+        <button className='btn btn-secondary position-absolute end-0 top-0' onClick={()=>setIsCartShown(false)}>X</button>
+        <h1>Cart is Empty</h1>
+      </div>
+    )
   }
 
   return (
@@ -39,7 +43,7 @@ const Cart = ({setIsCartShown}) => {
             ${el.price}
           </div>
           <div className='col-4 d-flex align-items-center'>
-            <Input value={el.quantity} className='form-control me-2' style={{ width: "55px", height: "35px" }} type={"number"}/>
+            <Input defaultvalue={el.quantity} className='form-control me-2' style={{ width: "55px", height: "35px" }} type={"number"}/>
             <button className='btn btn-danger' onClick={()=>removeFromCart(el.id)}>Remove</button>
           </div>
         </div>
