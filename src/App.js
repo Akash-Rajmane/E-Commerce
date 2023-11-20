@@ -1,17 +1,18 @@
 import React, { useContext, useState } from 'react';
 import './App.css';
 import Header from './components/header/Header';
-import Products from './pages/products/Products';
-import Cart from './components/cart/Cart';
 import { CartContextProvider } from './context/cart-context';
 import { Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
 import About from './pages/about/About';
-import Contact from './pages/contact/Contact';
-import Product from './pages/products/Product';
 import AuthContext from './context/auth-context';
 
 import Login from './pages/login/Login';
+
+const Product = React.lazy(() => import('./pages/products/Product'));
+const Contact = React.lazy(() => import('./pages/contact/Contact'));
+const Products = React.lazy(() => import('./pages/products/Products'));
+const Cart = React.lazy(() => import('./components/cart/Cart'));
 
 function App() {
   const [isCartShown, setIsCartShown] = useState(false);
