@@ -1,3 +1,7 @@
+### hosted link: https://ecommerce-by-akash-rajmane.netlify.app
+### login info: email: test@test.com password:test12345
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
