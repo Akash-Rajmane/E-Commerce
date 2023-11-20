@@ -19,7 +19,7 @@ const Header = ({setIsCartShown}) => {
             </ul>
         </nav>
         <div className='d-flex gap-4'>
-          {isLoggedIn && <button className='btn btn-primary d-flex gap-2' onClick={()=>setIsCartShown(flag=>!flag)}><span>Cart</span><span>{totalCartItems}</span></button>}
+          {isLoggedIn && <button className='btn btn-primary d-flex gap-2' onClick={()=>setIsCartShown(flag=>!flag)}><span>Cart</span>{totalCartItems!==0 && <span>{totalCartItems}</span>}</button>}
           {isLoggedIn && <button className='btn btn-danger' onClick={logout}>logout</button>}
         </div>
     </header>
