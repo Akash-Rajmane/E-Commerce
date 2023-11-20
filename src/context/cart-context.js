@@ -4,6 +4,7 @@ const CartContext = React.createContext({
     items: [],
     totalAmount: 0,
     cartId: null,
+    totalCartItems: 0,
     addItem: (item) => {},
     removeAllItems: () => {},
     removeEntireItem: (id) => {},
@@ -12,10 +13,11 @@ const CartContext = React.createContext({
 
 export default CartContext;
 
-const updateCartData = async (email, cartId, cartItems, amount) => {
+const updateCartData = async (email, cartId, cartItems, amount, newTotalCartItems) => {
     const cartData = {
         items: cartItems,
-        totalAmount: amount
+        totalAmount: amount,
+        totalCartItems: newTotalCartItems
     }
     try{
         const response = await fetch(`https://crudcrud.com/api/${process.env.REACT_APP_CRUD_KEY}/cart${email}/${cartId}`, {
@@ -36,7 +38,8 @@ const updateCartData = async (email, cartId, cartItems, amount) => {
 const defaultState = {
     items: [],
     totalAmount: 0,
-    cartId: null
+    cartId: null,
+    totalCartItems: 0
 }
 
 const cartReducer = (state, action) => {
@@ -50,6 +53,7 @@ const cartReducer = (state, action) => {
             const existingCartItem = state.items[existingCartItemIndex];
             
             let updatedItems;
+            let newTotalCartItems;
             const updatedTotalAmount = state.totalAmount + action.item.price*action.item.quantity;
         
             if (existingCartItem) {
@@ -59,13 +63,19 @@ const cartReducer = (state, action) => {
                 };
                 updatedItems = [...state.items];
                 updatedItems[existingCartItemIndex] = updatedItem;
+                newTotalCartItems = updatedItems.reduce((total, curr) => {
+                    return total + Number(curr.quantity);
+                }, 0);
                 
-                updateCartData(email,state.cartId,updatedItems,updatedTotalAmount);
+                updateCartData(email,state.cartId,updatedItems,updatedTotalAmount,newTotalCartItems);
 
             } else {
                 updatedItems = state.items.concat(action.item);
+                newTotalCartItems = updatedItems.reduce((total, curr) => {
+                    return total + Number(curr.quantity);
+                }, 0);
                 
-                updateCartData(email,state.cartId,updatedItems,updatedTotalAmount);
+                updateCartData(email,state.cartId,updatedItems,updatedTotalAmount,newTotalCartItems);
             }
             
             
@@ -73,6 +83,7 @@ const cartReducer = (state, action) => {
                 ...state,
                 items: updatedItems,
                 totalAmount: updatedTotalAmount,
+                totalCartItems : newTotalCartItems
             }
         }
         
@@ -81,25 +92,30 @@ const cartReducer = (state, action) => {
             
             const updatedItems = state.items.filter(item => item.id !== action.id);
             const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity)*Number(curr.price),0);
-
-            updateCartData(email,state.cartId,updatedItems,updatedTotalAmount);
+            let newTotalCartItems = updatedItems.reduce((total, curr) => {
+                return total + Number(curr.quantity);
+            }, 0);
+            updateCartData(email,state.cartId,updatedItems,updatedTotalAmount,newTotalCartItems);
            
             return {
                 ...state,
                 items: updatedItems,
                 totalAmount: updatedTotalAmount,
+                totalCartItems : newTotalCartItems
             }
         }
 
         case "REMOVE_ALL": {
             let items = [];
             let totalAmount = 0;
-            updateCartData(email,state.cartId,items,totalAmount);
+            let totalCartItems = 0;
+            updateCartData(email,state.cartId,items,totalAmount,totalCartItems);
 
             return {
                 ...state,
                 items: [],
-                totalAmount: 0
+                totalAmount: 0,
+                totalCartItems: 0
             }
         }
 
@@ -116,15 +132,18 @@ const cartReducer = (state, action) => {
             })
 
             const updatedTotalAmount = updatedItems.reduce((total,curr)=>total+Number(curr.quantity)*Number(curr.price),0);
-            
+            let newTotalCartItems = updatedItems.reduce((total, curr) => {
+                return total + Number(curr.quantity);
+            }, 0);
            
-            updateCartData(email,state.cartId,updatedItems,updatedTotalAmount);
+            updateCartData(email,state.cartId,updatedItems,updatedTotalAmount,newTotalCartItems);
             
             
             return{
                 ...state,
                 items: updatedItems,
-                totalAmount: updatedTotalAmount
+                totalAmount: updatedTotalAmount,
+                totalCartItems: newTotalCartItems
             }
         }
 
@@ -132,7 +151,8 @@ const cartReducer = (state, action) => {
             return {
                 ...state,
                 items: action.items,
-                totalAmount: action.totalAmount
+                totalAmount: action.totalAmount,
+                totalCartItems: action.totalCartItems  
             }
         }
 
@@ -183,6 +203,7 @@ export const CartContextProvider = (props) => {
                         type: "SET_CART",
                         items: data[0].items,
                         totalAmount: data[0].totalAmount,
+                        totalCartItems: data[0].totalCartItems
                     });
                     // Optionally, store cartId in context if needed
                     dispatch({ type: "SET_CART_ID", cartId });
@@ -193,6 +214,7 @@ export const CartContextProvider = (props) => {
                         body: JSON.stringify({
                             items: [],
                             totalAmount: 0,
+                            totalCartItems: 0
                         }),
                         headers: {
                             "Content-Type": "application/json",
@@ -219,6 +241,7 @@ export const CartContextProvider = (props) => {
     let cartContext = {
         items: cartState.items,
         totalAmount: cartState.totalAmount,
+        totalCartItems: cartState.totalCartItems,
         addItem: addItemToCartHandler,
         removeAllItems : removeAllItemsFromCartHandler, 
         removeEntireItem: removeEntireItemFromCartHandler,

@@ -1,20 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import CartContext from '../../context/cart-context';
 import { NavLink } from 'react-router-dom';
 import AuthContext from '../../context/auth-context';
 
 const Header = ({setIsCartShown}) => {
-  const {items} = useContext(CartContext);
+  const {totalCartItems} = useContext(CartContext);
   const {isLoggedIn, logout} = useContext(AuthContext);
-  const [totalCartItems, setTotalCartItems] = useState(0);
-
-  useEffect(() => {
-    // Calculate totalCartItems when items change
-    const newTotalCartItems = items.reduce((total, curr) => {
-        return total + Number(curr.quantity);
-    }, 0);
-    setTotalCartItems(newTotalCartItems);
-}, [items]);
 
   return (
     <header className="position-fixed w-100 top-0 start-0 bg-dark text-white d-flex justify-content-around align-items-center gap-4" style={{height:"60px", zIndex:"10"}}>
