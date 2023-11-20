@@ -8,9 +8,12 @@ const Products = ({products}) => {
 
     const addToCart = (el) => {
         let item = {
-            ...el,
+            id: el.id,
+            imageUrl: el.imageUrl,
+            price: el.price,
+            title: el.title,
             quantity: 1,
-            }
+        }
         
         addItem(item);
     }

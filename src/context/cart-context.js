@@ -1,4 +1,4 @@
-import React,{useReducer} from "react";
+import React,{useCallback, useReducer} from "react";
 
 const CartContext = React.createContext({
     items: [],
@@ -114,6 +114,7 @@ const cartReducer = (state, action) => {
 
 export const CartContextProvider = (props) => {
     const [cartState,dispatch] = useReducer(cartReducer,defaultState);
+    
     const addItemToCartHandler = (item) => {
         dispatch({type:"ADD", item:item})
     }
@@ -130,9 +131,9 @@ export const CartContextProvider = (props) => {
         dispatch({type:"REMOVE_ENTIRE_ITEM",id:id})
     }
 
-    const changeQuantityHandler = (id,quantity) => {
+    const changeQuantityHandler = useCallback((id,quantity) => {
         dispatch({type:"CHANGE_QUANTITY", id:id, quantity:quantity})
-    }
+    },[]);
 
 
     let cartContext = {

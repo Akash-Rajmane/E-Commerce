@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect} from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import CartContext from '../../context/cart-context';
 import Input from '../input/Input';
 
@@ -32,7 +32,7 @@ const Cart = ({setIsCartShown}) => {
         <div className='col-4'>Price</div>
         <div className='col-4'>Quantity</div>
       </div>
-      {items.map(el=><Item el={el} removeFromCart={removeFromCart} changeQuantity={changeQuantity}/>)}
+      {items.map(el=><Item el={el} removeFromCart={removeFromCart} changeQuantity={changeQuantity} key={el.id}/>)}
       <h4>Total: ${totalAmount}</h4>
       <button className='btn btn-primary' onClick={purchaseItemsFromCart}>Purchase</button>
     </div>
@@ -49,8 +49,12 @@ const Item = ({el,removeFromCart, changeQuantity}) => {
   }
 
   useEffect(()=>{
-    changeQuantity(el.id,quantity)
-  },[quantity,el.id,changeQuantity])
+    setQuantity(Number(el.quantity));
+  },[el.quantity])
+
+  useEffect(()=>{
+    changeQuantity(el.id,quantity);
+  },[el.id,quantity,changeQuantity])
 
   return(
     <div key={el.id} className='row w-100 mb-3'>

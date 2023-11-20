@@ -14,7 +14,7 @@ const Login = () => {
             password,
             returnSecureToken: true
         }
-        fetch("https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBkZkgf0qWT7RTSXmKZe87T1y4Gay73La4",
+        fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.REACT_APP_GOOGLE_API_KEY}`,
         {
             method: "POST",
             body: JSON.stringify(user),

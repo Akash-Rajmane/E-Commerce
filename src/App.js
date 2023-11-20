@@ -184,7 +184,7 @@ function App() {
     ];
 
   async function addMessageHandler(msg) {
-    const response = await fetch('https://e-com-b68c7-default-rtdb.asia-southeast1.firebasedatabase.app/messages.json',{
+    const response = await fetch(`${process.env.REACT_APP_GOOGLE_DB_URL}`,{
       method:'POST',
       body: JSON.stringify(msg),
       headers:{
