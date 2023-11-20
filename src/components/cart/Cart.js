@@ -5,6 +5,7 @@ import Input from '../input/Input';
 const Cart = ({setIsCartShown}) => {
   const {items,removeEntireItem,removeAllItems,totalAmount,changeQuantity} = useContext(CartContext);
   
+  
   const removeFromCart = (id) => {
     removeEntireItem(id);
   }

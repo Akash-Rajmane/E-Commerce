@@ -15,7 +15,9 @@ import Login from './pages/login/Login';
 
 function App() {
   const [isCartShown, setIsCartShown] = useState(false);
+
   const {isLoggedIn} = useContext(AuthContext);
+
 
   const productsArr = [
 
